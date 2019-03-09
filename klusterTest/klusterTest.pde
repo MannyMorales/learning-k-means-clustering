@@ -5,10 +5,10 @@ int numCentroids;
 
 void setup(){
   // sets canvas size
-  size(400, 400);
+  size(1600, 900);
 
   // randomly generate numPoints points around entire canvas
-  numPoints = 1000;
+  numPoints = 30000;
   points = new PVector[numPoints];
 
   // TODO:
@@ -26,13 +26,13 @@ void setup(){
   // TODO
   // Could be a problem if a random number is repeated
   // let's hope that doesn't happen for now...
-  numCentroids = 8;
+  numCentroids = 10;
   centroids = new Centroid[numCentroids];
   for(int i=0; i<numCentroids; i++){
-    // range of random ints for colors are limited to allow only relatively bright colors
+    // range of random ints for colors are limited to allow colors that are relatively vibrant
     // TODO
     // Find smarter way of assigning colors to make sure they're not too similar
-    color randCol = color(random(100,255), random(100,255), random(100,255));
+    color randCol = color(random(50,205), random(50,205), random(50,205));
     centroids[i] = new Centroid(points[(int)random(numPoints)], randCol); 
   }
   drawCentroids(centroids, 8);
@@ -40,7 +40,7 @@ void setup(){
 
 void draw(){
   // sleeps a bit so that you can see the difference between each iteration
-  delay(250);
+  delay(5);
 
   // clears all previoous dots to allow canvas to be updated
   background(0);
@@ -54,7 +54,12 @@ void draw(){
   // Have to draw them before updating as the points are colored
   // based on these positions
   for(int i=0; i<centroids.length; i++){
-    centroids[i].drawDot(8);
+    centroids[i].drawDot(16);
+    
+    // prints out the centroid number and how many points were clustered with it
+    System.out.println("Centroid #" + i + " (" + hex(centroids[i].colr) + ")" + ": " + centroids[i].runningTotalN + " points");
+    System.out.println("" + (float)100*((float)centroids[i].runningTotalN/(float)numPoints) + "% of points\n\n");
+    
     centroids[i].updatePosition();
   }
 
@@ -88,5 +93,5 @@ void findNearestCentroid(PVector point, Centroid[] arr){
 
   // redraw point with appropriate color
   fill(arr[centInd].colr);
-  ellipse(point.x, point.y, 4, 4);
+  ellipse(point.x, point.y, 8, 8);
 }
